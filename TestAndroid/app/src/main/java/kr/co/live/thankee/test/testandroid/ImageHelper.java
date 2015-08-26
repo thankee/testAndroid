@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+ 
 /**
  * Created by Dae-kwan on 2015-08-09.
  * Android개발에 필요한 각종 헬퍼 클래스
