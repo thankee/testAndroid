@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,16 +31,17 @@ public class MainActivity extends Activity
 		{
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_main);
-			getWindow().getAttributes().format = android.graphics.PixelFormat.RGBA_8888;
+			//getWindow().getAttributes().format = android.graphics.PixelFormat.RGBA_8888;
 
-			//1. 이미지 찾기
+			//1. 최초 이미지 설정
 			_imgvTop = (ImageView) findViewById(R.id.imgvTop);
 			_imgvBottom = (ImageView) findViewById(R.id.imgvBottom);
-			boolean isBackgroundLoaded = _imgvTop.getBackground() != null || _imgvBottom.getBackground() != null;
-			if (!isBackgroundLoaded)
+			boolean isTopBackgroundLoaded = _imgvTop.getBackground() != null;
+			boolean isBottomBackgroundLoaded = _imgvBottom.getBackground() != null;
+			if (!isTopBackgroundLoaded && !isBottomBackgroundLoaded)
 			{
 				//*. 아직 이미지가 지정되지 않았으면 이미지 지정
-				LayerDrawable image = (LayerDrawable)ImageHelper.createLargeDrawable(R.drawable.ezbiz_logo, this);
+				Drawable image = ImageHelper.createLargeDrawable(R.drawable.ezbiz_logo_sm, this);
 
 				_imgvTop.setImageDrawable(image);
 				_imgvTop.getLayoutParams().width = image.getIntrinsicWidth();
@@ -54,6 +55,28 @@ public class MainActivity extends Activity
 			{
 				public void onClick(View v)
 				{
+					Drawable topBackground = _imgvTop.getDrawable();
+					Drawable bottomBackground = _imgvBottom.getDrawable();
+					boolean isTopBackgroundLoaded = topBackground != null;
+					boolean isBottomBackgroundLoaded = bottomBackground != null;
+					if(isTopBackgroundLoaded)
+					{
+						_imgvBottom.setImageDrawable(topBackground);
+						_imgvTop.setImageDrawable(null);
+
+						ViewGroup.LayoutParams bottomLayoutParams = _imgvBottom.getLayoutParams();
+						bottomLayoutParams.width = topBackground.getIntrinsicWidth();
+						bottomLayoutParams.height = topBackground.getIntrinsicHeight();
+					}
+					else
+					{
+						_imgvBottom.setImageDrawable(null);
+						_imgvTop.setImageDrawable(bottomBackground);
+
+						ViewGroup.LayoutParams topLayoutParams = _imgvTop.getLayoutParams();
+						topLayoutParams.width = bottomBackground.getIntrinsicWidth();
+						topLayoutParams.height = bottomBackground.getIntrinsicHeight();
+					}
 					//Drawable background = _imgvTop.getBackground();
 				}
 			});

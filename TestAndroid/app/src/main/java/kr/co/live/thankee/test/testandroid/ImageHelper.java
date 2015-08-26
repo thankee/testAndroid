@@ -109,7 +109,6 @@ public class ImageHelper
 			int colCount = (int) Math.ceil((float) brd.getWidth() / (float) maxImageSize);
 
 			BitmapDrawable[] drawables = new BitmapDrawable[rowCount * colCount];
-
 			for (int i = 0; i < rowCount; i++)
 			{
 
